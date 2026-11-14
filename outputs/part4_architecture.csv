@@ -1,0 +1,6 @@
+layer_id,layer_name,layer_type,input_dim,output_dim,activation,weight_params,bias_params,total_params
+1,Input Layer,Input,7,7,None,0,0,0
+2,Dense_Hidden_1,Dense,7,16,ReLU,112,16,128
+3,Dense_Hidden_2,Dense,16,8,ReLU,128,8,136
+4,Output_Classification,Dense,8,1,Sigmoid,8,1,9
+TOTAL,Full Multi-Layer Perceptron,Feedforward Network,7,1,ReLU -> Sigmoid,248,25,273
