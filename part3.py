@@ -1,23 +1,3 @@
-"""
-Swiggy Support Decision Intelligence
-Part 3: Unsupervised Learning (PCA, K-Means & Hierarchical Clustering)
-
-Purpose:
-    Analyze latent variance and segment Swiggy customer support records using:
-    1. Principal Component Analysis (PCA) from scratch via covariance eigendecomposition.
-    2. K-Means Clustering from scratch with inertia (WCSS) elbow analysis across K in {2, 3, 4, 5, 6}.
-    3. Hierarchical Agglomerative Clustering from scratch with average linkage merge tracking.
-
-Outputs:
-    outputs/part3_results.txt      - Key-value metric outputs for PCA, K-Means, and Hierarchical clustering.
-    outputs/part3_segments.csv     - Record-level cluster assignments, original metrics, and PC1/PC2 coordinates.
-    outputs/part3_hierarchical.csv - Complete agglomerative merge sequence (step, clusters, distance, size).
-
-Strict constraints:
-    - Pure Python 3.10+ and NumPy only.
-    - No scikit-learn, no pandas for graded calculations, no scipy.cluster.
-    - Runs from the repository root.
-"""
 
 import csv
 import os
@@ -34,13 +14,9 @@ def load_records(filepath):
     return records
 
 
-# ==============================================================================
-# Task 3.1 & 3.2: Standardisation and Principal Component Analysis (PCA)
-# ==============================================================================
-
 def pca_from_scratch(X_std):
     """
-    Compute PCA via sample covariance matrix eigendecomposition:
+    Computing PCA via sample covariance matrix eigendecomposition:
     Sigma = (1 / (n - 1)) * X_std^T @ X_std
     """
     n, d = X_std.shape
@@ -62,9 +38,6 @@ def pca_from_scratch(X_std):
     return sorted_evals, sorted_evecs, explained_ratios, cumulative_ratios, projections
 
 
-# ==============================================================================
-# Task 3.3: K-Means Clustering from Scratch
-# ==============================================================================
 
 def kmeans_fit(X_std, k, max_iter=100, seed=42):
     """
@@ -116,9 +89,7 @@ def kmeans_fit(X_std, k, max_iter=100, seed=42):
     return labels, centroids, wcss
 
 
-# ==============================================================================
-# Task 3.4: Hierarchical Agglomerative Clustering from Scratch
-# ==============================================================================
+
 
 def hierarchical_clustering_average_linkage(X_std, target_clusters=4):
     """
@@ -199,9 +170,8 @@ def hierarchical_clustering_average_linkage(X_std, target_clusters=4):
     return merge_history, flat_labels
 
 
-# ==============================================================================
-# Main Orchestration
-# ==============================================================================
+
+
 
 def main():
     data_path = os.path.join("data", "records.csv")
