@@ -1,27 +1,3 @@
-"""
-Swiggy Support Decision Intelligence
-Part 4: Ensemble Methods & Neural Network Architecture
-
-Purpose:
-    Build advanced ensemble architectures and neural network models strictly from scratch:
-    1. Dataset splitting and Decision Tree split / Gini impurity analysis.
-    2. AdaBoost (Adaptive Boosting) with Decision Stumps as weak learners.
-    3. Voting Classifier combining diverse models (Hard and Soft Voting).
-    4. Multi-Layer Perceptron (MLP) Neural Network architecture and Backpropagation.
-
-Outputs:
-    outputs/part4_results.txt      - Key-value benchmark report for ensembles and neural network.
-    outputs/part4_splits.csv       - Candidate decision tree splits ranked by Gini Gain.
-    outputs/part4_voting.csv       - Evaluation metrics across individual and ensemble models.
-    outputs/part4_adaboost.csv     - AdaBoost iteration log (stump parameters, alpha, accuracies).
-    outputs/part4_architecture.csv - Neural network structural specifications and parameter counts.
-
-Strict constraints:
-    - Pure Python 3.10+ and NumPy only.
-    - No scikit-learn, no pandas for graded calculations, no PyTorch / TensorFlow.
-    - Runs from the repository root.
-"""
-
 import csv
 import os
 import numpy as np
@@ -42,10 +18,6 @@ def sigmoid(z):
     z_clipped = np.clip(z, -250.0, 250.0)
     return 1.0 / (1.0 + np.exp(-z_clipped))
 
-
-# ==============================================================================
-# Task 4.1: Decision Tree Candidate Splits & Gini Impurity
-# ==============================================================================
 
 def compute_gini_impurity(y_subset):
     """Gini Impurity: G = 1 - (p0^2 + p1^2)."""
@@ -99,9 +71,7 @@ def evaluate_candidate_splits(X, y, feature_cols):
     return split_records, base_gini
 
 
-# ==============================================================================
-# Task 4.2: AdaBoost Classifier from Scratch
-# ==============================================================================
+
 
 class DecisionStump:
     """1-level decision tree for binary classification with labels in {-1, +1}."""
@@ -210,10 +180,6 @@ class AdaBoostClassifierFromScratch:
         return sigmoid(scores)
 
 
-# ==============================================================================
-# Task 4.3: Voting Ensemble from Scratch
-# ==============================================================================
-
 def train_simple_logistic(X, y, eta=0.1, epochs=500):
     n, d = X.shape
     w = np.zeros(d, dtype=float)
@@ -302,10 +268,6 @@ def run_voting_ensemble(X_train, y_train, X_test, y_test, candidate_splits):
 
     return voting_results
 
-
-# ==============================================================================
-# Task 4.4: Multi-Layer Perceptron (Neural Network) from Scratch
-# ==============================================================================
 
 class MultiLayerPerceptronFromScratch:
     """
@@ -415,9 +377,6 @@ def generate_architecture_specs(input_dim=7):
     return layers, summary
 
 
-# ==============================================================================
-# Main Orchestration
-# ==============================================================================
 
 def main():
     data_path = os.path.join("data", "records.csv")
