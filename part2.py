@@ -108,9 +108,7 @@ def main():
     ]
     target_col = "escalated"
 
-    # -------------------------------------------------------------------------
-    # Task 2.1: Stratified 70/30 split preserving file order & standardisation
-    # -------------------------------------------------------------------------
+   
     idx_outcome_0 = [i for i, r in enumerate(rows) if int(r[target_col]) == 0]
     idx_outcome_1 = [i for i, r in enumerate(rows) if int(r[target_col]) == 1]
 
@@ -136,10 +134,7 @@ def main():
 
     X_train = (X_train_raw - train_mean) / train_sd
     X_test = (X_test_raw - train_mean) / train_sd
-
-    # -------------------------------------------------------------------------
-    # Task 2.2: Logistic regression from scratch (eta = 0.1, 1000 updates)
-    # -------------------------------------------------------------------------
+    
     w_final, b_final, losses_22 = train_logistic_regression(
         X_train, y_train, eta=0.1, epochs=1000, record_epochs=(0, 1, 10, 100, 1000)
     )
@@ -150,9 +145,6 @@ def main():
     loss_epoch_1000 = losses_22[1000]
     test_bce = bce_loss(X_test, y_test, w_final, b_final)
 
-    # -------------------------------------------------------------------------
-    # Task 2.3: Learning-rate effect (eta in {0.01, 0.1, 1.0}, 200 updates)
-    # -------------------------------------------------------------------------
     _, _, l_001 = train_logistic_regression(X_train, y_train, eta=0.01, epochs=200, record_epochs=(200,))
     _, _, l_01 = train_logistic_regression(X_train, y_train, eta=0.1, epochs=200, record_epochs=(200,))
     _, _, l_10 = train_logistic_regression(X_train, y_train, eta=1.0, epochs=200, record_epochs=(200,))
@@ -160,22 +152,15 @@ def main():
     loss_epoch_200_eta_01 = l_01[200]
     loss_epoch_200_eta_10 = l_10[200]
 
-    # -------------------------------------------------------------------------
-    # Task 2.4: Odds ratios = e^(weight)
-    # -------------------------------------------------------------------------
+
     odds_ratios = np.exp(w_final)
 
-    # -------------------------------------------------------------------------
-    # Task 2.5: Evaluate on test rows at tau = 0.5 and tau = 0.3 + blind_accuracy
-    # -------------------------------------------------------------------------
     p_test = sigmoid(X_test @ w_final + b_final)
     metrics_tau_05 = compute_confusion_metrics(y_test, (p_test >= 0.5).astype(int))
     metrics_tau_03 = compute_confusion_metrics(y_test, (p_test >= 0.3).astype(int))
     blind_accuracy = float(np.sum(y_test == 0) / test_rows)
 
-    # -------------------------------------------------------------------------
-    # Task 2.6: Threshold sweep (tau = 0.1, 0.2, ..., 0.9) -> part2_thresholds.csv
-    # -------------------------------------------------------------------------
+
     os.makedirs("outputs", exist_ok=True)
     thresholds_path = os.path.join("outputs", "part2_thresholds.csv")
     with open(thresholds_path, "w", newline="", encoding="utf-8") as f:
@@ -194,9 +179,7 @@ def main():
                 f"{m['fpr']:.6f}",
             ])
 
-    # -------------------------------------------------------------------------
-    # Task 2.7: K-nearest neighbours with 5-fold cross-validation -> part2_knn_cv.csv
-    # -------------------------------------------------------------------------
+   
     k_values = list(range(1, 22, 2))  # Odd K in {1, 3, 5, ..., 21}
     folds = np.arange(train_rows) % 5  # 0-based position in training set modulo 5
     cv_results = []
@@ -229,9 +212,7 @@ def main():
     knn_test_preds = knn_predict(X_train, y_train, X_test, knn_best_k)
     knn_metrics = compute_confusion_metrics(y_test, knn_test_preds)
 
-    # -------------------------------------------------------------------------
-    # Task 2.8: Choose alert threshold with money (cost = 50 * fp + 400 * fn)
-    # -------------------------------------------------------------------------
+
     p_train = sigmoid(X_train @ w_final + b_final)
     cost_tau = None
     min_train_cost = float("inf")
